@@ -10,5 +10,5 @@ pip freeze > requirements.txt
  
 ## Use
 ```
-git clone https://github.com/dada79119/linebot.git
+git clone https://github.com/dada79119/timliaoAPI.git
 ```
