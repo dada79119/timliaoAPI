@@ -35,9 +35,9 @@ def scrapyImg(link):
     re = requests.get(url = link)
     soup = BeautifulSoup(re.text, 'html.parser')
     getImageHead = soup.find("h1",{'class','head'})
-    #print(getImageHead)
+    # print(getImageHead)
     headTitle = getImageHead.text.strip()[0:256].encode('ISO-8859-1','ignore').decode('big5')
-    #print(headTitle)
+    # print(headTitle)
     getImageLink = soup.findAll("img",{'class','imglimit'})
     src = ''
     for Imgsrc in getImageLink:
@@ -53,10 +53,17 @@ if __name__ == '__main__':
     PicArray = []
     content = srapy(TIMLIAO_URL)
     IndexArray = get_link(content)
+    count=0
     for link in IndexArray:
         return_json = scrapyImg(link)
+
         PicArray.append(return_json)
-    print('########## JSON ############## \n',PicArray[0])
+
+        
+        while len(PicArray)>count:
+           
+             print('########## JSON ############## \n',PicArray[count])
+             count = count+1
 
 
 
