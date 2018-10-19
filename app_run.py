@@ -9,6 +9,14 @@ from flask import Flask, render_template, request, redirect, session
 
 # ssl._create_default_https_context = ssl._create_unverified_context
 
+
+# flask route set
+app = Flask(__name__)
+@app.route('/')
+def index(pic):
+    return pic
+    # return '200'
+
 # asign URLs
 TIMLIAO_URL = 'http://www.timliao.com/bbs/forumdisplay.php'
 
@@ -50,7 +58,9 @@ def scrapyImg(link):
     return jsonStr
 
 if __name__ == '__main__':
+    # app.run(debug=True)
     PicArray = []
+    jsonArray = []
     content = srapy(TIMLIAO_URL)
     IndexArray = get_link(content)
     count=0
@@ -58,13 +68,22 @@ if __name__ == '__main__':
         return_json = scrapyImg(link)
 
         PicArray.append(return_json)
-
-        
+       
         while len(PicArray)>count:
            
-             print('########## JSON ############## \n',PicArray[count])
-             count = count+1
+            # print('\n',PicArray[count])
+            jsonArray.append(PicArray[count])
+            count = count+1
 
+
+            if len(PicArray) < count:    
+
+                break
+            
+        print(jsonArray)
+    
+
+# app.run(port=5000, debug=True)
 
 
 
