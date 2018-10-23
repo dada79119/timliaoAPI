@@ -5,7 +5,7 @@ import time
 import os
 import urllib.request
 import json
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, jsonify
 
 # ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -13,9 +13,25 @@ from flask import Flask, render_template, request, redirect, session
 # flask route set
 app = Flask(__name__)
 @app.route('/')
-def index(pic):
-    return pic
-    # return '200'
+def index():
+
+    PicArray = []
+    jsonArray = []
+    content = srapy(TIMLIAO_URL)
+    IndexArray = get_link(content)
+    count=0
+    for link in IndexArray:
+        return_json = scrapyImg(link)
+        PicArray.append(return_json)
+       
+        while len(PicArray)>count:
+                      
+            # jsonArray.append(PicArray[count])
+             # return jsonify(jsonArray)
+            count = count+1
+    return jsonify(PicArray)
+
+
 
 # asign URLs
 TIMLIAO_URL = 'http://www.timliao.com/bbs/forumdisplay.php'
@@ -56,34 +72,9 @@ def scrapyImg(link):
         'Imgsrc':src[:-1]
     }
     return jsonStr
-
-if __name__ == '__main__':
-    # app.run(debug=True)
-    PicArray = []
-    jsonArray = []
-    content = srapy(TIMLIAO_URL)
-    IndexArray = get_link(content)
-    count=0
-    for link in IndexArray:
-        return_json = scrapyImg(link)
-
-        PicArray.append(return_json)
-       
-        while len(PicArray)>count:
-           
-            # print('\n',PicArray[count])
-            jsonArray.append(PicArray[count])
-            count = count+1
-
-
-            if len(PicArray) < count:    
-
-                break
-            
-        print(jsonArray)
     
 
-# app.run(port=5000, debug=True)
+app.run(port=5000, debug=True)
 
 
 
