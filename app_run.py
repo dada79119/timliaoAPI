@@ -8,31 +8,6 @@ import json
 from flask import Flask, render_template, request, redirect, session, jsonify
 
 # ssl._create_default_https_context = ssl._create_unverified_context
-
-
-# flask route set
-app = Flask(__name__)
-@app.route('/')
-def index():
-
-    PicArray = []
-    jsonArray = []
-    content = srapy(TIMLIAO_URL)
-    IndexArray = get_link(content)
-    count=0
-    for link in IndexArray:
-        return_json = scrapyImg(link)
-        PicArray.append(return_json)
-       
-        while len(PicArray)>count:
-                      
-            # jsonArray.append(PicArray[count])
-             # return jsonify(jsonArray)
-            count = count+1
-    return jsonify(PicArray)
-
-
-
 # asign URLs
 TIMLIAO_URL = 'http://www.timliao.com/bbs/forumdisplay.php'
 
@@ -48,9 +23,8 @@ def get_link(dom):
     articleLink=[]
     for article in dom.findAll("h2",{'class','subject'}):
         if article.a.get('href') != None and len(article.a.get('href')) == 24:
-            link = 'http://www.timliao.com/bbs/'+article.a.get('href')
+            link = article.a.get('href')[-5:]
             articleLink.append(link)
-
     return articleLink
 
 
@@ -74,6 +48,32 @@ def scrapyImg(link):
     return jsonStr
     
 
+
+
+# flask route set
+app = Flask(__name__)
+@app.route("/", methods=['GET','POST'])
+def index():
+    if request.method == 'GET':
+        if request.args.get('get_tid') == 'true':
+            content = srapy(TIMLIAO_URL)
+            IndexArray = get_link(content)
+    return jsonify(IndexArray)
+    '''
+    PicArray = []
+    jsonArray = []
+    content = srapy(TIMLIAO_URL)
+    IndexArray = get_link(content)
+    count=0
+    for link in IndexArray:
+        return_json = scrapyImg(link)
+        PicArray.append(return_json)
+        while len(PicArray)>count:
+            # jsonArray.append(PicArray[count])
+            # return jsonify(jsonArray)
+            count = count+1
+    return jsonify(PicArray)
+    '''
 app.run(port=5000, debug=True)
 
 
